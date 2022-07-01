@@ -13,54 +13,49 @@ class ButterflyView extends StatefulWidget {
 class _ButterflyViewState extends State<ButterflyView>
   with TickerProviderStateMixin {
 
-  late Animation<double> animation;
-  late AnimationController controller;
+  late Animation<double> animationDownWing;
+  late AnimationController controllerWing;
 
-  late Animation<double> animation2;
-  late AnimationController controller2;
+  late Animation<double> animationUpWing;
+  late Animation<double> _flapDownCurve;
+  late Animation<double> _flapUpCurve;
+  //late Animation<double> _wingFlapAnimation;
+  static final Tween<double> _rightFrontWingFlapDownTween = Tween(begin: 0.0, end: 3*math.pi/4);
+  static final Tween<double> _rightFrontWingFlapUpTween = Tween(begin:3*math.pi/4, end: 0);
 
   @override
   void initState() {
     super.initState();
 
-    controller = AnimationController(
+    controllerWing = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 100),
+      duration: Duration(milliseconds: 2000),
     );
 
-    Tween<double> _rightFrontWingFlapDownTween = Tween(begin: 0.0, end: math.pi/2);
+    // _flapDownCurve = CurvedAnimation(parent: controllerWing, curve: Curves.easeOutCirc);
+    // _flapUpCurve = CurvedAnimation(parent: controllerWing, curve: Curves.easeOutCirc);
+    _flapDownCurve = CurvedAnimation(parent: controllerWing, curve: const Interval(0.0, 0.5));
+    _flapUpCurve = CurvedAnimation(parent: controllerWing, curve: const Interval(0.5, 1.0));
 
-    animation = _rightFrontWingFlapDownTween.animate(controller)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-            controller.reverse();
-        } else if (status == AnimationStatus.dismissed) {
-          controller.forward();
-        }
-      });
+    animationDownWing = _rightFrontWingFlapDownTween.animate(_flapDownCurve);
+    animationUpWing = _rightFrontWingFlapUpTween.animate(_flapUpCurve);
+    // ..addListener(() {
+    //   setState(() {});
+    // })
+    // ..addStatusListener((status) {
+    //   if (status == AnimationStatus.completed) {
+    //       controllerWing.reverse();
+    //   } else if (status == AnimationStatus.dismissed) {
+    //       controllerWing.forward();
+    //   }
+    // });
 
-    // animation2 = _radiusTween.animate(controller2)
-    //   ..addListener(() {
-    //     setState(() {});
-    //   })
-    //   ..addStatusListener((status) {
-    //     if (status == AnimationStatus.completed) {
-    //       controller2.reverse();
-    //     } else if (status == AnimationStatus.dismissed) {
-    //       controller2.forward();
-    //     }
-    //   });
-
-    controller.forward();
-//    controller2.forward();
-  }
+    controllerWing.repeat();
+ }
 
   @override
   void dispose() {
-    controller.dispose();
+    controllerWing.dispose();
     super.dispose();
   }
 
@@ -68,11 +63,12 @@ class _ButterflyViewState extends State<ButterflyView>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animation,
+      animation: controllerWing,
       builder: (context, snapshot) {
         return Transform(
         transform: Matrix4.identity()
-          ..rotateX(animation.value),
+          ..rotateX(animationDownWing.value - animationUpWing.value)
+            ..rotateZ(math.pi/15),
         origin: const Offset(230, 300),
         child: Container(
           width: 300,
@@ -89,14 +85,8 @@ class _ButterflyViewState extends State<ButterflyView>
 class RightFrontWingPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    // var centerX = size.width / 2;
-    // var centerY = size.height / 2;
-    // var center = Offset(centerX, centerY);
-    // var radius = min(centerX, centerY);
-
     var fillBrush = Paint()..color = Color(0xff46b3f7);
 
-    //canvas.drawCircle(center, radius, fillBrush);
     Vertices vertices = Vertices(VertexMode.triangleFan, [
       const Offset(100, 150),
       const Offset(200, 40),
