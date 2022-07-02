@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:simple_animations/simple_animations.dart';
 
 class ButterflyView extends StatefulWidget {
   const ButterflyView({Key? key}) : super(key: key);
@@ -10,48 +11,37 @@ class ButterflyView extends StatefulWidget {
   State<ButterflyView> createState() => _ButterflyViewState();
 }
 
+enum _AniProps { xtransform, ztransform}
+
 class _ButterflyViewState extends State<ButterflyView>
   with TickerProviderStateMixin {
 
-  late Animation<double> animationDownWing;
+  static final theDuration = 2000;
+
   late AnimationController controllerWing;
 
-  late Animation<double> animationUpWing;
-  late Animation<double> _flapDownCurve;
-  late Animation<double> _flapUpCurve;
-  //late Animation<double> _wingFlapAnimation;
-  static final Tween<double> _rightFrontWingFlapDownTween = Tween(begin: 0.0, end: 3*math.pi/4);
+ static final Tween<double> _rightFrontWingFlapDownTween = Tween(begin: 0.0, end: 3*math.pi/4);
   static final Tween<double> _rightFrontWingFlapUpTween = Tween(begin:3*math.pi/4, end: 0);
-
+  static final Tween<double> _rightFrontWingRotateFlapDownTween = Tween(begin:-math.pi/4, end:math.pi/4);
+  static final Tween<double> _rightFrontWingRotateFlapUpTween = Tween(begin:math.pi/4, end:-math.pi/4);
+  static final Tween<double> _rightFrontWingRotateHoldFlapDownTween = Tween(begin:math.pi/4, end:math.pi/4);
+  static final Tween<double> _rightFrontWingRotateHoldFlapUpTween = Tween(begin:-math.pi/4, end:-math.pi/4);
+  static final MultiTween<_AniProps> _flapTween = MultiTween<_AniProps>()
+    ..add(_AniProps.xtransform, _rightFrontWingFlapDownTween, Duration(milliseconds: theDuration~/2))
+    ..add(_AniProps.xtransform, _rightFrontWingFlapUpTween, Duration(milliseconds: theDuration~/2))
+    ..add(_AniProps.ztransform, _rightFrontWingRotateFlapDownTween, Duration(milliseconds: theDuration~/(2*10)))
+    ..add(_AniProps.ztransform, _rightFrontWingRotateFlapUpTween, Duration(milliseconds: theDuration~/(2*10)))
+    ..add(_AniProps.ztransform, _rightFrontWingRotateHoldFlapDownTween, Duration(milliseconds: 9*theDuration~/(2*10)))
+    ..add(_AniProps.ztransform, _rightFrontWingRotateHoldFlapUpTween, Duration(milliseconds: 9*theDuration~/(2*10)));
   @override
   void initState() {
     super.initState();
 
     controllerWing = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 2000),
+      duration: Duration(milliseconds: theDuration),
     );
-
-    // _flapDownCurve = CurvedAnimation(parent: controllerWing, curve: Curves.easeOutCirc);
-    // _flapUpCurve = CurvedAnimation(parent: controllerWing, curve: Curves.easeOutCirc);
-    _flapDownCurve = CurvedAnimation(parent: controllerWing, curve: const Interval(0.0, 0.5));
-    _flapUpCurve = CurvedAnimation(parent: controllerWing, curve: const Interval(0.5, 1.0));
-
-    animationDownWing = _rightFrontWingFlapDownTween.animate(_flapDownCurve);
-    animationUpWing = _rightFrontWingFlapUpTween.animate(_flapUpCurve);
-    // ..addListener(() {
-    //   setState(() {});
-    // })
-    // ..addStatusListener((status) {
-    //   if (status == AnimationStatus.completed) {
-    //       controllerWing.reverse();
-    //   } else if (status == AnimationStatus.dismissed) {
-    //       controllerWing.forward();
-    //   }
-    // });
-
-    controllerWing.repeat();
- }
+  }
 
   @override
   void dispose() {
@@ -62,14 +52,17 @@ class _ButterflyViewState extends State<ButterflyView>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controllerWing,
-      builder: (context, snapshot) {
+    return LoopAnimation<MultiTweenValues<_AniProps>>(
+      tween: _flapTween,
+      duration:_flapTween.duration,
+      builder: (context, child, value) {
         return Transform(
         transform: Matrix4.identity()
-          ..rotateX(animationDownWing.value - animationUpWing.value)
-            ..rotateZ(math.pi/15),
-        origin: const Offset(230, 300),
+          // ..rotateZ(math.pi/15)
+          ..rotateZ(value.get(_AniProps.ztransform))
+          ..rotateX(value.get(_AniProps.xtransform)),
+            // ..rotateX(animationDownWing.value - animationUpWing.value),
+            origin: const Offset(230, 300),
         child: Container(
           width: 300,
           height: 300,
@@ -77,7 +70,7 @@ class _ButterflyViewState extends State<ButterflyView>
             painter: RightFrontWingPainter(),
           ),
         ));
-  },
+  }
     );
   }
 }
