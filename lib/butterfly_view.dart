@@ -18,6 +18,7 @@ class _ButterflyViewState extends State<ButterflyView>
   with TickerProviderStateMixin {
 
   static final theDuration = 2000;
+  static final origin = Offset(230, 300);
   static double painterCanvasYTransformAngle = 0;
   late AnimationController controllerWing;
 
@@ -59,12 +60,12 @@ class _ButterflyViewState extends State<ButterflyView>
         return Transform(
         transform: Matrix4.identity()
           ..rotateX(value.get(_AniProps.xtransform)),
-           origin: const Offset(230, 300),
+           origin: origin,
         child: Container(
           width: 300,
           height: 300,
           child: CustomPaint(
-            painter: RightFrontWingPainter(),
+            painter: RightWingsPainter(),
           ),
         ));
   }
@@ -72,23 +73,34 @@ class _ButterflyViewState extends State<ButterflyView>
   }
 }
 
-class RightFrontWingPainter extends CustomPainter {
+class RightWingsPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var fillBrush = Paint()..color = Color(0xff46b3f7);
 
-    Vertices vertices = Vertices(VertexMode.triangleFan, [
-      const Offset(100, 150),
-      const Offset(200, 40),
+    Vertices rightRearWingVertices = Vertices(VertexMode.triangleFan, [
+      const Offset(90, 190),
+      const Offset(225, 285),
+      const Offset(220, 310),
+      const Offset(100, 320),
+      const Offset(75, 250)
+    ]);
+
+    canvas.drawVertices(rightRearWingVertices, BlendMode.color, fillBrush);
+
+    Vertices rightFrontWingVertices = Vertices(VertexMode.triangleFan, [
+      const Offset(100, 160),
+      const Offset(180, 90),
+      const Offset(200, 20),
       const Offset(250, 200),
-      const Offset(230, 300)
+      _ButterflyViewState.origin
     ]);
 
     drawRotated(
         canvas,
-        const Offset(230, 300),
-     /*math.pi/4*/   _ButterflyViewState.painterCanvasYTransformAngle,
-            () => canvas.drawVertices(vertices, BlendMode.color, fillBrush)
+        _ButterflyViewState.origin,
+        _ButterflyViewState.painterCanvasYTransformAngle,
+            () => canvas.drawVertices(rightFrontWingVertices, BlendMode.color, fillBrush)
     );
   }
 
