@@ -1,5 +1,6 @@
 import 'package:butterfly_pavilion/butterfly_view.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 void main() {
   runApp(const MyApp());
@@ -73,8 +74,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
        body: Container(
          alignment: Alignment.center,
-         color: Color(0xFF2D2F41),
-         child: ButterflyView(),
+         color: Colors.black,
+         child: Transform(
+           transform: Matrix4.identity()
+             ..rotateX(math.pi/10)
+              ..rotateY(math.pi/10)
+             ..setEntry(3, 2, 0.001),
+           child: ButterflyView(),
+         ),
        ),
      );
   }
