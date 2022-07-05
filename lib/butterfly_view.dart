@@ -21,6 +21,8 @@ class _ButterflyViewState extends State<ButterflyView>
   static double painterCanvasYTransformAngle = 0;
   late AnimationController controllerWing;
 
+  late bool isMirror;
+
   static final Tween<double> _rightFrontWingFlapDownTween =
       Tween(begin: 0.0, end: 3 * math.pi / 4);
   static final Tween<double> _rightFrontWingFlapUpTween =
@@ -79,7 +81,7 @@ class _ButterflyViewState extends State<ButterflyView>
                     width: 300,
                     height: 300,
                     child: CustomPaint(
-                      painter: RightWingsPainter(),
+                      painter: RightWingsPainter(true),
                     ),
                   )),
 
@@ -91,7 +93,7 @@ class _ButterflyViewState extends State<ButterflyView>
                     width: 300,
                     height: 300,
                     child: CustomPaint(
-                      painter: RightWingsPainter(),
+                      painter: RightWingsPainter(false),
                     ),
                   ))
             ],
@@ -101,6 +103,11 @@ class _ButterflyViewState extends State<ButterflyView>
 }
 
 class RightWingsPainter extends CustomPainter {
+  bool isMirror = false;
+  RightWingsPainter (bool isMirrorr) {
+    isMirror = isMirrorr;
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
      var fillBrush = Paint()..color = Color(0xff46b3f7);
@@ -130,7 +137,7 @@ class RightWingsPainter extends CustomPainter {
     drawRotated(
         canvas,
         _ButterflyViewState.origin,
-        _ButterflyViewState.painterCanvasYTransformAngle,
+        ((isMirror) ? -1 : 1) * _ButterflyViewState.painterCanvasYTransformAngle,
         () => canvas.drawVertices(
             rightFrontWingVertices, BlendMode.color, fillBrush));
   }
