@@ -16,7 +16,7 @@ enum _AniProps { xtransform, canvasYTransform }
 
 class _ButterflyViewState extends State<ButterflyView>
     with TickerProviderStateMixin {
-  static final theDuration = 2000;
+  static final theDuration = 1000 /* 40 is actual butterfly flap speed */;
   static final origin = Offset(230, 300);
   static double painterCanvasYTransformAngle = 0;
   late AnimationController controllerWing;
