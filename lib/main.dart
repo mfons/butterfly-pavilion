@@ -78,7 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
          child: Transform(
            transform: Matrix4.identity()
              ..rotateX(math.pi/10)
-              ..rotateY(math.pi/10)
+             ..rotateY(math.pi/10)
+             ..rotateZ(-math.pi/10)
              ..setEntry(3, 2, 0.001),
            child: ButterflyView(),
          ),
