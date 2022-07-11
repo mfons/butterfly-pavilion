@@ -1,10 +1,12 @@
 import 'package:butterfly_pavilion/butterfly_view.dart';
+import 'package:butterfly_pavilion/routes.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 void main() {
   runApp(const MyApp());
 }
+
 // test change
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -71,20 +73,29 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(title: const Text("Butterflies.org...tap the butterfly to continue...")),
-       body: Container(
-         alignment: Alignment.center,
-         color: Colors.amberAccent,
-         child: Transform(
-           transform: Matrix4.identity()
-             ..rotateX(math.pi/10)
-             ..rotateY(math.pi/10)
-             ..rotateZ(-math.pi/10)
-             ..setEntry(3, 2, 0.001),
-           child: ButterflyView(),
-         ),
-       ),
-     );
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SecondRoute()),
+          );
+        },
+        child: Scaffold(
+          appBar: AppBar(
+              title: const Text(
+                  "Butterflies.org...tap the butterfly to continue...")),
+          body: Container(
+            alignment: Alignment.center,
+            color: Colors.amberAccent,
+            child: Transform(
+              transform: Matrix4.identity()
+                ..rotateX(math.pi / 10)
+                ..rotateY(math.pi / 10)
+                ..rotateZ(-math.pi / 10)
+                ..setEntry(3, 2, 0.001),
+              child: ButterflyView(),
+            ),
+          ),
+        ));
   }
 }
