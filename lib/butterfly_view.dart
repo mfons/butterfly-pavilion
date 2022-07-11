@@ -66,7 +66,8 @@ class _ButterflyViewState extends State<ButterflyView>
 
   @override
   Widget build(BuildContext context) {
-    return LoopAnimation<MultiTweenValues<_AniProps>>(
+    return
+      LoopAnimation<MultiTweenValues<_AniProps>>(
         tween: _flapTween,
         duration: _flapTween.duration,
         builder: (context, child, value) {
