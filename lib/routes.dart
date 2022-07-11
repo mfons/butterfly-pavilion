@@ -29,6 +29,16 @@ class SecondRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Second Route'),
+        leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Hero(
+              tag: 'butterflyHero',
+              child: ClipOval(
+                child: Image(
+                  image: Image.asset('images/butterfly-avatar.jpg').image,
+                ),
+              ),
+            )),
       ),
       body: Center(
         child: ElevatedButton(
