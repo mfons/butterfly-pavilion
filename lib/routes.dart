@@ -21,15 +21,45 @@ class FirstRoute extends StatelessWidget {
   }
 }
 
-class SecondRoute extends StatelessWidget {
-  const SecondRoute({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          // This removes padding from the list view...important?  why?
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              title: const Text('Item 1'),
+              onTap: () {
+                // Update app state.
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Item 2'),
+              onTap: () {
+                // Update state.
+                Navigator.pop(context);
+              }
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
-        title: const Text('Second Route'),
-        leading: Padding(
+        title: Container(
+          width: 40,
+          child:
+        Padding(
             padding: const EdgeInsets.all(8.0),
             child: Hero(
               tag: 'butterflyHero',
@@ -39,6 +69,8 @@ class SecondRoute extends StatelessWidget {
                 ),
               ),
             )),
+        ),
+        centerTitle: true,
       ),
       body: Center(
         child: ElevatedButton(
