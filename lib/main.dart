@@ -77,7 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+              PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 750),
+                  pageBuilder: (_, __, ___) => const HomePage()),
           );
         },
         child: Scaffold(
