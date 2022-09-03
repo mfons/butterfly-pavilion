@@ -16,7 +16,7 @@ enum _AniProps { xtransform, canvasYTransform }
 
 class _ButterflyViewState extends State<ButterflyView>
     with TickerProviderStateMixin {
-  static final theDuration = 1000 /* 40 is actual butterfly flap speed */;
+  static final theDuration = 2500 /* 40 is actual butterfly flap speed */;
   static final origin = Offset(230, 300);
   static double painterCanvasYTransformAngle = 0;
   late AnimationController controllerWing;
@@ -105,13 +105,11 @@ class _ButterflyViewState extends State<ButterflyView>
 
 class RightWingsPainter extends CustomPainter {
   bool isMirror = false;
-  RightWingsPainter (bool isMirrorr) {
-    isMirror = isMirrorr;
-  }
+  RightWingsPainter (this.isMirror);
 
   @override
   void paint(Canvas canvas, Size size) {
-     var fillBrush = Paint()..color = Color(0xff46b3f7);
+     var fillBrush = Paint()..color = isMirror ? Colors.deepOrange : Colors.blue;
     // Paint redPaint = new Paint()
     // ..color = Color.fromARGB(0, 0, 0, 255)
     // ..style = PaintingStyle.fill;

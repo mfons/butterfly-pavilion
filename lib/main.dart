@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -47,24 +47,7 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   // int _counter = 0;
-  //
-  // void _incrementCounter() {
-  //   setState(() {
-  //     // This call to setState tells the Flutter framework that something has
-  //     // changed in this State, which causes it to rerun the build method below
-  //     // so that the display can reflect the updated values. If we changed
-  //     // _counter without calling setState(), then the build method would not be
-  //     // called again, and so nothing would appear to happen.
-  //     _counter++;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -94,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Transform(
                   transform: Matrix4.identity()
                     ..rotateX(math.pi / 10)
-                    ..rotateY(math.pi / 10)
+                    ..rotateY(-math.pi / 3)
                     ..rotateZ(-math.pi / 10)
                     ..setEntry(3, 2, 0.001),
                   child: ButterflyView(),
