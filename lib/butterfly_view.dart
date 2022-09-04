@@ -27,12 +27,14 @@ class _ButterflyViewState extends State<ButterflyView>
       Tween(begin: 0.0, end: 3 * math.pi / 4);
   static final Tween<double> _rightFrontWingFlapUpTween =
       Tween(begin: 3 * math.pi / 4, end: 0);
+  static final Tween<double> _rightFrontWingFlapCanvasRotationStartDownTween =
+  Tween(begin: -math.pi / 2, end: math.pi / 4);
   static final Tween<double> _rightFrontWingFlapCanvasRotationDownTween =
-      Tween(begin: math.pi / 4, end: math.pi / 4);
+  Tween(begin: math.pi / 4, end: math.pi / 4);
   static final Tween<double> _rightFrontWingFlapCanvasRotationDownUpTween =
-      Tween(begin: math.pi / 4, end: -math.pi / 4);
+      Tween(begin: math.pi / 4, end: -math.pi / 2);
   static final Tween<double> _rightFrontWingFlapCanvasRotationUpTween =
-      Tween(begin: -math.pi / 4, end: -math.pi / 4);
+      Tween(begin: -math.pi / 2, end: -math.pi / 2);
   static final MultiTween<_AniProps> _flapTween = MultiTween<_AniProps>()
     ..add(_AniProps.xtransform, _rightFrontWingFlapDownTween,
         Duration(milliseconds: theDuration ~/ 2))
@@ -40,8 +42,12 @@ class _ButterflyViewState extends State<ButterflyView>
         Duration(milliseconds: theDuration ~/ 2))
     ..add(
         _AniProps.canvasYTransform,
+        _rightFrontWingFlapCanvasRotationStartDownTween,
+        Duration(milliseconds: 200))
+    ..add(
+        _AniProps.canvasYTransform,
         _rightFrontWingFlapCanvasRotationDownTween,
-        Duration(milliseconds: theDuration ~/ 2 - 100))
+        Duration(milliseconds: theDuration ~/ 2 - 300))
     ..add(
         _AniProps.canvasYTransform,
         _rightFrontWingFlapCanvasRotationDownUpTween,
