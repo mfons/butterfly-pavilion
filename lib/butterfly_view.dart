@@ -148,6 +148,8 @@ class RightWingsPainter extends CustomPainter {
     //     () => canvas.drawVertices(
     //         rightFrontWingVertices, BlendMode.color, fillBrush));
 
+     // This form of the wing generated with https://www.youtube.com/watch?v=AnKgtKxRLX4
+     //  download and install at https://fluttershapemaker.com/
      Paint paint0 = Paint()
        ..color = const Color.fromARGB(255, 33, 150, 243)
        ..style = PaintingStyle.fill
@@ -172,11 +174,53 @@ class RightWingsPainter extends CustomPainter {
      path0.quadraticBezierTo(size.width*0.8374333,size.height*0.5637000,size.width*0.7666667,size.height*0.7500000);
      path0.close();
 
+
+     Paint paint1 = Paint()
+       ..color = const Color.fromARGB(255, 33, 150, 243)
+       ..style = PaintingStyle.fill
+       ..strokeWidth = 1.0;
+
+
+     Path path1 = Path();
+     path1.moveTo(size.width*0.6266667,size.height*0.1800000);
+     path1.lineTo(size.width*0.6700000,size.height*0.2200000);
+     path1.lineTo(size.width*0.7166667,size.height*0.2600000);
+     path1.lineTo(size.width*0.7633333,size.height*0.2950000);
+     path1.lineTo(size.width*0.8100000,size.height*0.3350000);
+     path1.lineTo(size.width*0.8200000,size.height*0.4225000);
+     path1.lineTo(size.width*0.7533333,size.height*0.3725000);
+     path1.lineTo(size.width*0.6766667,size.height*0.3025000);
+     path1.lineTo(size.width*0.6033333,size.height*0.2350000);
+     path1.lineTo(size.width*0.8133333,size.height*0.5225000);
+     path1.lineTo(size.width*0.7800000,size.height*0.5025000);
+     path1.lineTo(size.width*0.7133333,size.height*0.4400000);
+     path1.lineTo(size.width*0.6633333,size.height*0.3950000);
+     path1.lineTo(size.width*0.5900000,size.height*0.3375000);
+     path1.lineTo(size.width*0.5433333,size.height*0.2925000);
+     path1.lineTo(size.width*0.5233333,size.height*0.2725000);
+     path1.lineTo(size.width*0.7866667,size.height*0.6100000);
+     path1.lineTo(size.width*0.7633333,size.height*0.5825000);
+     path1.lineTo(size.width*0.7200000,size.height*0.5500000);
+     path1.lineTo(size.width*0.6866667,size.height*0.5200000);
+     path1.lineTo(size.width*0.6433333,size.height*0.4925000);
+     path1.lineTo(size.width*0.5766667,size.height*0.4325000);
+     path1.lineTo(size.width*0.4666667,size.height*0.3425000);
+     path1.lineTo(size.width*0.4466667,size.height*0.3225000);
+     path1.lineTo(size.width*0.7800000,size.height*0.6850000);
+     path1.lineTo(size.width*0.7266667,size.height*0.6400000);
+     path1.lineTo(size.width*0.6300000,size.height*0.5625000);
+     path1.lineTo(size.width*0.4933333,size.height*0.4525000);
+     path1.lineTo(size.width*0.4100000,size.height*0.3800000);
+     path1.lineTo(size.width*0.3900000,size.height*0.3550000);
+
+     canvas.drawPath(path1, paint1);
+
+
      drawRotated(
          canvas,
          _ButterflyViewState.origin,
          ((isMirror) ? -1 : 1) * _ButterflyViewState.painterCanvasYTransformAngle,
-             () => canvas.drawPath(path0, paint0));
+             () => {canvas.drawPath(path0, paint0), canvas.drawPath(path1, paint1)});
   }
 
   /**
