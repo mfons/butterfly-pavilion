@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -16,7 +16,7 @@ enum _AniProps { xtransform, canvasYTransform }
 
 class _ButterflyViewState extends State<ButterflyView>
     with TickerProviderStateMixin {
-  static final theDuration = 2500 /* 40 is actual butterfly flap speed */;
+  static final theDuration = 2500 /* 10 flaps/second (160 milliseconds/flap) is actual butterfly flap speed */;
   static final origin = Offset(230, 300);
   static double painterCanvasYTransformAngle = 0;
   late AnimationController controllerWing;
@@ -86,8 +86,9 @@ class _ButterflyViewState extends State<ButterflyView>
                   origin: origin,
                   child: Container(
                     width: 300,
-                    height: 300,
+                    height: 400,
                     child: CustomPaint(
+                     // size: Size(300,(300*1.3333333333333333).toDouble()),
                       painter: RightWingsPainter(true),
                     ),
                   )),
@@ -98,8 +99,9 @@ class _ButterflyViewState extends State<ButterflyView>
                   origin: origin,
                   child: Container(
                     width: 300,
-                    height: 300,
+                    height: 400,
                     child: CustomPaint(
+                     // size: Size(300,(300*1.3333333333333333).toDouble()),
                       painter: RightWingsPainter(false),
                     ),
                   ))
@@ -121,7 +123,7 @@ class RightWingsPainter extends CustomPainter {
     // ..style = PaintingStyle.fill;
     // canvas.drawPaint(redPaint);
 
-    Vertices rightRearWingVertices = Vertices(VertexMode.triangleFan, [
+    ui.Vertices rightRearWingVertices = ui.Vertices(VertexMode.triangleFan, [
       const Offset(90, 180),
       const Offset(225, 275),
       const Offset(220, 300),
@@ -131,20 +133,50 @@ class RightWingsPainter extends CustomPainter {
 
     canvas.drawVertices(rightRearWingVertices, BlendMode.color, fillBrush);
 
-    Vertices rightFrontWingVertices = Vertices(VertexMode.triangleFan, [
-      const Offset(100, 160),
-      const Offset(180, 90),
-      const Offset(200, 20),
-      const Offset(250, 200),
-      _ButterflyViewState.origin
-    ]);
+    // ui.Vertices rightFrontWingVertices = ui.Vertices(VertexMode.triangleFan, [
+    //   const Offset(100, 160),
+    //   const Offset(180, 90),
+    //   const Offset(200, 20),
+    //   const Offset(250, 200),
+    //   _ButterflyViewState.origin
+    // ]);
 
-    drawRotated(
-        canvas,
-        _ButterflyViewState.origin,
-        ((isMirror) ? -1 : 1) * _ButterflyViewState.painterCanvasYTransformAngle,
-        () => canvas.drawVertices(
-            rightFrontWingVertices, BlendMode.color, fillBrush));
+    // drawRotated(
+    //     canvas,
+    //     _ButterflyViewState.origin,
+    //     ((isMirror) ? -1 : 1) * _ButterflyViewState.painterCanvasYTransformAngle,
+    //     () => canvas.drawVertices(
+    //         rightFrontWingVertices, BlendMode.color, fillBrush));
+
+     Paint paint0 = Paint()
+       ..color = const Color.fromARGB(255, 33, 150, 243)
+       ..style = PaintingStyle.fill
+       ..strokeWidth = 1.0;
+     paint0.shader = ui.Gradient.linear(Offset(size.width*0.84,size.height*0.05),Offset(size.width*0.32,size.height*0.75),[Color(0xff000000),Color(0xff000000),Color(0xff3ba6eb),Color(0xff50b5f1)],[0.00,0.11,0.26,1.00]);
+
+     Path path0 = Path();
+     path0.moveTo(size.width*0.7666667,size.height*0.7500000);
+     path0.quadraticBezierTo(size.width*0.3505000,size.height*0.4212000,size.width*0.3333333,size.height*0.4000000);
+     path0.cubicTo(size.width*0.3188333,size.height*0.3861000,size.width*0.3462667,size.height*0.3508500,size.width*0.3567000,size.height*0.3458750);
+     path0.cubicTo(size.width*0.3733667,size.height*0.3387750,size.width*0.4091000,size.height*0.3472500,size.width*0.4278000,size.height*0.3425250);
+     path0.cubicTo(size.width*0.4403333,size.height*0.3295500,size.width*0.4155333,size.height*0.2857000,size.width*0.4409000,size.height*0.2776000);
+     path0.cubicTo(size.width*0.4635333,size.height*0.2747500,size.width*0.5045000,size.height*0.2894000,size.width*0.5176333,size.height*0.2842500);
+     path0.cubicTo(size.width*0.5283667,size.height*0.2765250,size.width*0.5210000,size.height*0.2414750,size.width*0.5399000,size.height*0.2325500);
+     path0.cubicTo(size.width*0.5480000,size.height*0.2280500,size.width*0.5905667,size.height*0.2304000,size.width*0.6000000,size.height*0.2225000);
+     path0.cubicTo(size.width*0.6117667,size.height*0.2136750,size.width*0.5993333,size.height*0.1858000,size.width*0.6055000,size.height*0.1775750);
+     path0.quadraticBezierTo(size.width*0.6101333,size.height*0.1695000,size.width*0.6399667,size.height*0.1525000);
+     path0.quadraticBezierTo(size.width*0.6277000,size.height*0.1212000,size.width*0.6300000,size.height*0.1075750);
+     path0.quadraticBezierTo(size.width*0.6296667,size.height*0.0977000,size.width*0.6511000,size.height*0.0800750);
+     path0.quadraticBezierTo(size.width*0.6459667,size.height*0.0533250,size.width*0.6666667,size.height*0.0500000);
+     path0.cubicTo(size.width*0.7793667,size.height*0.1559000,size.width*0.8444667,size.height*0.3899000,size.width*0.8333333,size.height*0.5000000);
+     path0.quadraticBezierTo(size.width*0.8374333,size.height*0.5637000,size.width*0.7666667,size.height*0.7500000);
+     path0.close();
+
+     drawRotated(
+         canvas,
+         _ButterflyViewState.origin,
+         ((isMirror) ? -1 : 1) * _ButterflyViewState.painterCanvasYTransformAngle,
+             () => canvas.drawPath(path0, paint0));
   }
 
   /**

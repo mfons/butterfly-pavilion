@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -47,7 +47,14 @@ class MyHomePage extends StatelessWidget {
 
   final String title;
 
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   // int _counter = 0;
+  double _xRotation = math.pi / 10;
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -65,6 +72,11 @@ class MyHomePage extends StatelessWidget {
                   pageBuilder: (_, __, ___) => const HomePage()),
           );
         },
+        onVerticalDragEnd: (details) {
+          setState(() {
+            _xRotation = _xRotation + math.pi/10;
+          });
+        },
         child: Scaffold(
           // appBar: AppBar(
           //     title: const Text(
@@ -76,7 +88,8 @@ class MyHomePage extends StatelessWidget {
                 tag: 'butterflyHero',
                 child: Transform(
                   transform: Matrix4.identity()
-                    ..rotateX(math.pi / 10)
+                  //..rotateX(math.pi / 10)
+                  ..rotateX(_xRotation)
                     ..rotateY(-math.pi / 3)
                     ..rotateZ(-math.pi / 10)
                     ..setEntry(3, 2, 0.001),
