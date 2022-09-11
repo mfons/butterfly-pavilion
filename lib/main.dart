@@ -54,7 +54,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // int _counter = 0;
   double _xRotation = math.pi / 10;
-
+  double _yRotation = -math.pi / 3;
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -72,9 +72,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   pageBuilder: (_, __, ___) => const HomePage()),
           );
         },
-        onVerticalDragEnd: (details) {
+       onVerticalDragUpdate: (details) {
           setState(() {
-            _xRotation = _xRotation + math.pi/10;
+            _xRotation = _xRotation + details.delta.direction/60;
+          });
+        },
+        onHorizontalDragUpdate: (details) {
+          setState(() {
+            _yRotation = _yRotation + details.primaryDelta!/60;
           });
         },
         child: Scaffold(
@@ -90,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   transform: Matrix4.identity()
                   //..rotateX(math.pi / 10)
                   ..rotateX(_xRotation)
-                    ..rotateY(-math.pi / 3)
+                    ..rotateY(_yRotation)
                     ..rotateZ(-math.pi / 10)
                     ..setEntry(3, 2, 0.001),
                   child: ButterflyView(),

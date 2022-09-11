@@ -16,7 +16,7 @@ enum _AniProps { xtransform, canvasYTransform }
 
 class _ButterflyViewState extends State<ButterflyView>
     with TickerProviderStateMixin {
-  static final theDuration = 2500 /* 10 flaps/second (160 milliseconds/flap) is actual butterfly flap speed */;
+  static const theDuration = 2500 /* 10 flaps/second (160 milliseconds/flap) is actual butterfly flap speed */;
   static final origin = Offset(230, 300);
   static double painterCanvasYTransformAngle = 0;
   late AnimationController controllerWing;
@@ -35,6 +35,7 @@ class _ButterflyViewState extends State<ButterflyView>
       Tween(begin: math.pi / 8, end: -math.pi /3 );
   static final Tween<double> _rightFrontWingFlapCanvasRotationUpTween =
       Tween(begin: -math.pi /3, end: -math.pi /3 );
+
   static final MultiTween<_AniProps> _flapTween = MultiTween<_AniProps>()
     ..add(_AniProps.xtransform, _rightFrontWingFlapDownTween,
         Duration(milliseconds: theDuration ~/ 2))
@@ -131,8 +132,13 @@ class RightWingsPainter extends CustomPainter {
       const Offset(75, 240)
     ]);
 
-    canvas.drawVertices(rightRearWingVertices, BlendMode.color, fillBrush);
+     drawWithGap(
+         canvas,
+         _ButterflyViewState.origin,
+             () => canvas.drawVertices(rightRearWingVertices, BlendMode.color, fillBrush));
 
+
+// FRONT WING DRAWING
     // ui.Vertices rightFrontWingVertices = ui.Vertices(VertexMode.triangleFan, [
     //   const Offset(100, 160),
     //   const Offset(180, 90),
@@ -182,7 +188,7 @@ class RightWingsPainter extends CustomPainter {
 
 
      Path path1 = Path();
-     path1.moveTo(size.width*0.6266667,size.height*0.1800000);
+     path1.moveTo(size.width*0.6553000,size.height*0.1979250);
      path1.lineTo(size.width*0.6700000,size.height*0.2200000);
      path1.lineTo(size.width*0.7166667,size.height*0.2600000);
      path1.lineTo(size.width*0.7633333,size.height*0.2950000);
@@ -197,7 +203,7 @@ class RightWingsPainter extends CustomPainter {
      path1.lineTo(size.width*0.6633333,size.height*0.3950000);
      path1.lineTo(size.width*0.5900000,size.height*0.3375000);
      path1.lineTo(size.width*0.5433333,size.height*0.2925000);
-     path1.lineTo(size.width*0.5233333,size.height*0.2725000);
+     path1.lineTo(size.width*0.5313333,size.height*0.2820750);
      path1.lineTo(size.width*0.7866667,size.height*0.6100000);
      path1.lineTo(size.width*0.7633333,size.height*0.5825000);
      path1.lineTo(size.width*0.7200000,size.height*0.5500000);
@@ -205,16 +211,13 @@ class RightWingsPainter extends CustomPainter {
      path1.lineTo(size.width*0.6433333,size.height*0.4925000);
      path1.lineTo(size.width*0.5766667,size.height*0.4325000);
      path1.lineTo(size.width*0.4666667,size.height*0.3425000);
-     path1.lineTo(size.width*0.4466667,size.height*0.3225000);
+     path1.lineTo(size.width*0.4626667,size.height*0.3356750);
      path1.lineTo(size.width*0.7800000,size.height*0.6850000);
      path1.lineTo(size.width*0.7266667,size.height*0.6400000);
      path1.lineTo(size.width*0.6300000,size.height*0.5625000);
      path1.lineTo(size.width*0.4933333,size.height*0.4525000);
      path1.lineTo(size.width*0.4100000,size.height*0.3800000);
-     path1.lineTo(size.width*0.3900000,size.height*0.3550000);
-
-     canvas.drawPath(path1, paint1);
-
+     path1.lineTo(size.width*0.4059667,size.height*0.3669750);
 
      drawRotated(
          canvas,
@@ -235,6 +238,17 @@ class RightWingsPainter extends CustomPainter {
     canvas.save();
     canvas.translate(origin.dx, origin.dy);
     canvas.transform(rotateY(angle));
+    canvas.translate(-5, -5); // leave room for the body
+    canvas.translate(-origin.dx, -origin.dy);
+    drawFunction();
+    canvas.restore();
+  }
+
+  void drawWithGap(
+      Canvas canvas, Offset origin, VoidCallback drawFunction) {
+    canvas.save();
+    canvas.translate(origin.dx, origin.dy);
+    canvas.translate(-10, -10); // leave room for the body
     canvas.translate(-origin.dx, -origin.dy);
     drawFunction();
     canvas.restore();
