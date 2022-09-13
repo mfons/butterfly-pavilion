@@ -56,7 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
   // double _xRotation = math.pi / 10;
   // double _yRotation = -math.pi / 3;
   double rx = 0.0, ry = 0.0, rz = 0.0;
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -136,6 +135,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 min: 0,
                 max: math.pi * 2,
               ),
+              // Slider(
+              //   value: _duration.toDouble(),
+              //   onChanged: (value) => setState(() => _duration = value.toInt()),
+              //   min: 160,
+              //   max: 2500,
+              // ),
             ],
           ),
         ));

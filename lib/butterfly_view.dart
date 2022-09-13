@@ -9,14 +9,17 @@ class ButterflyView extends StatefulWidget {
   const ButterflyView({Key? key}) : super(key: key);
 
   @override
-  State<ButterflyView> createState() => _ButterflyViewState();
+  State<ButterflyView> createState() {
+    return _ButterflyViewState();
+  }
 }
 
 enum _AniProps { xtransform, canvasYTransform }
 
 class _ButterflyViewState extends State<ButterflyView>
     with TickerProviderStateMixin {
-  static const theDuration = 2500 /* 10 flaps/second (160 milliseconds/flap) is actual butterfly flap speed */;
+
+  static int theDuration = 2500 /* 10 flaps/second (160 milliseconds/flap) is actual butterfly flap speed */;
   static final origin = Offset(230, 300);
   static double painterCanvasYTransformAngle = 0;
   late AnimationController controllerWing;
