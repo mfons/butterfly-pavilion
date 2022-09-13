@@ -53,8 +53,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // int _counter = 0;
-  double _xRotation = math.pi / 10;
-  double _yRotation = -math.pi / 3;
+  // double _xRotation = math.pi / 10;
+  // double _yRotation = -math.pi / 3;
+  double rx = 0.0, ry = 0.0, rz = 0.0;
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -72,34 +74,69 @@ class _MyHomePageState extends State<MyHomePage> {
                   pageBuilder: (_, __, ___) => const HomePage()),
           );
         },
-       onVerticalDragUpdate: (details) {
+       // onVerticalDragUpdate: (details) {
+       //    setState(() {
+       //      _xRotation = _xRotation + details.delta.direction/60;
+       //    });
+       //  },
+       //  onHorizontalDragUpdate: (details) {
+       //    setState(() {
+       //      _yRotation = _yRotation + details.primaryDelta!/60;
+       //    });
+       //  },
+        onPanUpdate: (details) {
+          ry += details.delta.dx * 0.01;
+          rx += details.delta.dy * 0.01;
+         // rz += details.delta.dz * 0.01;
           setState(() {
-            _xRotation = _xRotation + details.delta.direction/60;
-          });
-        },
-        onHorizontalDragUpdate: (details) {
-          setState(() {
-            _yRotation = _yRotation + details.primaryDelta!/60;
+            rx %= math.pi * 2;
+            ry %= math.pi * 2;
+            rz %= math.pi * 2;
           });
         },
         child: Scaffold(
           // appBar: AppBar(
           //     title: const Text(
           //         "Butterflies.org...tap the butterfly to continue...")),
-          body: Container(
-            alignment: Alignment.center,
-            color: Colors.amberAccent,
-            child: Hero(
-                tag: 'butterflyHero',
-                child: Transform(
-                  transform: Matrix4.identity()
-                  //..rotateX(math.pi / 10)
-                  ..rotateX(_xRotation)
-                    ..rotateY(_yRotation)
-                    ..rotateZ(-math.pi / 10)
-                    ..setEntry(3, 2, 0.001),
-                  child: ButterflyView(),
-                )),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                color: Colors.amberAccent,
+                child: Hero(
+                    tag: 'butterflyHero',
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.identity()
+                      //..rotateX(math.pi / 10)
+                      ..rotateX(rx/*_xRotation*/)
+                        ..rotateY(ry /*_yRotation */)
+                        ..rotateZ(rz)
+                        ..setEntry(3, 2, 0.001),
+                      child: ButterflyView(),
+                    )),
+              ),
+              const SizedBox(height: 32),
+              Slider(
+                value: rx,
+                onChanged: (value) => setState(() => rx = value),
+                min: 0,
+                max: math.pi * 2,
+              ),
+              Slider(
+                value: ry,
+                onChanged: (value) => setState(() => ry = value),
+                min: 0,
+                max: math.pi * 2,
+              ),
+              Slider(
+                value: rz,
+                onChanged: (value) => setState(() => rz = value),
+                min: 0,
+                max: math.pi * 2,
+              ),
+            ],
           ),
         ));
   }
