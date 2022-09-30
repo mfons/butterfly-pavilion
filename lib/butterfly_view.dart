@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:butterfly_pavilion/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:simple_animations/simple_animations.dart';
@@ -19,7 +20,7 @@ enum _AniProps { xtransform, canvasYTransform }
 class _ButterflyViewState extends State<ButterflyView>
     with TickerProviderStateMixin {
 
-  static int theDuration = 2500 /* 10 flaps/second (160 milliseconds/flap) is actual butterfly flap speed */;
+ // static int theDuration = 2500 /* 10 flaps/second (160 milliseconds/flap) is actual butterfly flap speed */;
   static final origin = Offset(230, 300);
   static double painterCanvasYTransformAngle = 0;
   late AnimationController controllerWing;
@@ -39,33 +40,10 @@ class _ButterflyViewState extends State<ButterflyView>
   static final Tween<double> _rightFrontWingFlapCanvasRotationUpTween =
       Tween(begin: -math.pi /3, end: -math.pi /3 );
 
-  static final MultiTween<_AniProps> _flapTween = MultiTween<_AniProps>()
-    ..add(_AniProps.xtransform, _rightFrontWingFlapDownTween,
-        Duration(milliseconds: theDuration ~/ 2))
-    ..add(_AniProps.xtransform, _rightFrontWingFlapUpTween,
-        Duration(milliseconds: theDuration ~/ 2))
-    ..add(
-        _AniProps.canvasYTransform,
-        _rightFrontWingFlapCanvasRotationStartDownTween,
-        Duration(milliseconds: 2 * theDuration ~/ 25))
-    ..add(
-        _AniProps.canvasYTransform,
-        _rightFrontWingFlapCanvasRotationDownTween,
-        Duration(milliseconds: theDuration ~/ 2 - 3 * theDuration ~/ 25))
-    ..add(
-        _AniProps.canvasYTransform,
-        _rightFrontWingFlapCanvasRotationDownUpTween,
-        Duration(milliseconds: 2 * theDuration ~/ 25))
-    ..add(_AniProps.canvasYTransform, _rightFrontWingFlapCanvasRotationUpTween,
-        Duration(milliseconds: theDuration ~/ 2 - 1 * theDuration ~/ 25));
   @override
   void initState() {
     super.initState();
 
-    controllerWing = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: theDuration),
-    );
   }
 
   @override
@@ -76,6 +54,34 @@ class _ButterflyViewState extends State<ButterflyView>
 
   @override
   Widget build(BuildContext context) {
+    int theDuration = AppStateScope.of(context).duration;
+
+    controllerWing = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: theDuration),
+    );
+
+
+    final MultiTween<_AniProps> _flapTween = MultiTween<_AniProps>()
+      ..add(_AniProps.xtransform, _rightFrontWingFlapDownTween,
+          Duration(milliseconds: theDuration ~/ 2))
+      ..add(_AniProps.xtransform, _rightFrontWingFlapUpTween,
+          Duration(milliseconds: theDuration ~/ 2))
+      ..add(
+          _AniProps.canvasYTransform,
+          _rightFrontWingFlapCanvasRotationStartDownTween,
+          Duration(milliseconds: 2 * theDuration ~/ 25))
+      ..add(
+          _AniProps.canvasYTransform,
+          _rightFrontWingFlapCanvasRotationDownTween,
+          Duration(milliseconds: theDuration ~/ 2 - 3 * theDuration ~/ 25))
+      ..add(
+          _AniProps.canvasYTransform,
+          _rightFrontWingFlapCanvasRotationDownUpTween,
+          Duration(milliseconds: 2 * theDuration ~/ 25))
+      ..add(_AniProps.canvasYTransform, _rightFrontWingFlapCanvasRotationUpTween,
+          Duration(milliseconds: theDuration ~/ 2 - 1 * theDuration ~/ 25));
+
     return
       LoopAnimation<MultiTweenValues<_AniProps>>(
         tween: _flapTween,

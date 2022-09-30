@@ -4,7 +4,61 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 void main() {
-  runApp(const MyApp());
+  runApp(const AppStateWidget(child: MyApp()));
+}
+
+class AppState {
+  AppState({
+    required this.duration
+});
+  int duration = 2500;
+  AppState copyWith({
+  required int duration
+}) {
+    return AppState(duration:duration);
+  }
+}
+
+class AppStateScope extends InheritedWidget {
+  final AppState data;
+  const AppStateScope(this.data, {Key? key, required Widget child}) : super(key: key, child: child);
+
+  static AppState of (BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<AppStateScope>()!.data;
+  }
+
+  @override
+  bool updateShouldNotify(AppStateScope oldWidget) {
+    return data != oldWidget.data;
+  }
+}
+
+class AppStateWidget extends StatefulWidget {
+  const AppStateWidget ({required this.child});
+  
+  final Widget child;
+
+  static AppStateWidgetState of (BuildContext context) {
+    return context.findAncestorStateOfType<AppStateWidgetState>()!;
+  }
+  
+  @override
+  AppStateWidgetState createState() => AppStateWidgetState();
+}
+
+class AppStateWidgetState extends State<AppStateWidget> {
+  AppState _data = AppState(duration: 2500);
+  void updateDuration(int duration) {
+    setState(() {
+      _data = _data.copyWith(duration: duration);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppStateScope(_data, child: widget.child);
+  }
+  
 }
 
 // test change
@@ -117,30 +171,45 @@ class _MyHomePageState extends State<MyHomePage> {
                     )),
               ),
               const SizedBox(height: 32),
-              Slider(
+              Row(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                const Text("x"),
+                Slider(
                 value: rx,
                 onChanged: (value) => setState(() => rx = value),
                 min: 0,
                 max: math.pi * 2,
               ),
+              ],),
+          Row(mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("y"),
               Slider(
                 value: ry,
                 onChanged: (value) => setState(() => ry = value),
                 min: 0,
                 max: math.pi * 2,
-              ),
+              ),],),
+
+          Row(mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("z"),
               Slider(
                 value: rz,
                 onChanged: (value) => setState(() => rz = value),
                 min: 0,
                 max: math.pi * 2,
-              ),
-              // Slider(
-              //   value: _duration.toDouble(),
-              //   onChanged: (value) => setState(() => _duration = value.toInt()),
-              //   min: 160,
-              //   max: 2500,
-              // ),
+              ),],),
+
+          Row(mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("speed"),
+               Slider(
+                value: AppStateScope.of(context).duration.toDouble(),
+                onChanged: (value) => AppStateWidget.of(context).updateDuration(value.toInt()),
+                min: 160,
+                max: 2500,
+              ),],),
             ],
           ),
         ));
