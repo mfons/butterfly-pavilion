@@ -11,7 +11,7 @@ class AppState {
   AppState({
     required this.duration
 });
-  int duration = 2501;
+  int duration = 2502;
   AppState copyWith({
   required int duration
 }) {
